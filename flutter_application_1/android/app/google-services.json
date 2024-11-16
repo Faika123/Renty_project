@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "835005131222",
+    "project_id": "renty-5a34e",
+    "storage_bucket": "renty-5a34e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:835005131222:android:dd6bd52c7d7ee184cf5c77",
+        "android_client_info": {
+          "package_name": "com.example.flutter_application_1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAz61Gp6H-3VsZUSIHsOqpqXsuruKyuXYQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

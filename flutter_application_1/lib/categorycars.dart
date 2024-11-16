@@ -119,7 +119,7 @@ class CategoryCarsPage extends StatelessWidget {
                         ),
                         child: Text('Détails Location'),
                       ),
-                      SizedBox(height: 8),
+                      SizedBox(height: 16),
                     ],
                   ),
                 ],

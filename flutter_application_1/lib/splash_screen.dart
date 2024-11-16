@@ -40,7 +40,7 @@ class _SplashScreenState extends State<SplashScreen> {
               'Say Hello To Your New App!',
               style: TextStyle(
                 fontSize: 28,
-                color: Colors.blue,
+                color: const Color.fromARGB(255, 1, 102, 185),
                 fontWeight: FontWeight.bold,
                 letterSpacing: 1.2,
               ),

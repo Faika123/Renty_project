@@ -184,15 +184,15 @@ class CarDetailsPage extends StatelessWidget {
             children: [
               Text(
                 'Booking',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 16),
               _buildCustomTextField(label: 'Name'),
-              SizedBox(height: 16),
+              SizedBox(height: 12),
               _buildCustomTextField(label: 'Email'),
-              SizedBox(height: 16),
+              SizedBox(height: 12),
               _buildCustomTextField(label: 'Phone Number'),
-              SizedBox(height: 16),
+              SizedBox(height: 12),
               GestureDetector(
                 onTap: () async {
                   startDate = await showDatePicker(
@@ -211,7 +211,7 @@ class CarDetailsPage extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 16),
+              SizedBox(height: 12),
               GestureDetector(
                 onTap: () async {
                   endDate = await showDatePicker(
@@ -231,23 +231,7 @@ class CarDetailsPage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 16),
-              DropdownButtonFormField<String>(
-                decoration: InputDecoration(
-                  labelText: 'Service Type',
-                  border: OutlineInputBorder(),
-                  filled: true,
-                  fillColor: Colors.white,
-                ),
-                items: ['Without Driver', 'With Driver']
-                    .map((label) => DropdownMenuItem(
-                          child: Text(label),
-                          value: label,
-                        ))
-                    .toList(),
-                onChanged: (value) {
-                  // Handle service type selection
-                },
-              ),
+              _buildCustomDropdown(),
               SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {
@@ -280,13 +264,43 @@ class CarDetailsPage extends StatelessWidget {
   }) {
     return TextField(
       controller: controller,
+      style: TextStyle(fontSize: 16),
       decoration: InputDecoration(
         labelText: label,
-        border: OutlineInputBorder(),
+        labelStyle: TextStyle(color: Colors.blue),
         filled: true,
-        fillColor: Colors.white,
-        suffixIcon: suffixIcon != null ? Icon(suffixIcon) : null,
+        fillColor: Colors.blue.shade50,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide.none,
+        ),
+        suffixIcon: suffixIcon != null ? Icon(suffixIcon, color: Colors.blue) : null,
       ),
+    );
+  }
+
+  // Widget personnalisé pour le Dropdown
+  Widget _buildCustomDropdown() {
+    return DropdownButtonFormField<String>(
+      decoration: InputDecoration(
+        labelText: 'Service Type',
+        labelStyle: TextStyle(color: Colors.blue),
+        filled: true,
+        fillColor: Colors.blue.shade50,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide.none,
+        ),
+      ),
+      items: ['Without Driver', 'With Driver']
+          .map((label) => DropdownMenuItem(
+                child: Text(label),
+                value: label,
+              ))
+          .toList(),
+      onChanged: (value) {
+        // Handle service type selection
+      },
     );
   }
 }
