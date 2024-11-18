@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'homepage.dart';
 import 'dashboard.dart';
+import 'profile.dart';
 
 class LoginPage extends StatelessWidget {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-       // leading: BackButton(color: Colors.blue),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
@@ -32,7 +36,6 @@ class LoginPage extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Login Icon and Title Text
               Icon(Icons.lock, size: 80, color: Colors.blue),
               SizedBox(height: 20),
               Text(
@@ -44,9 +47,8 @@ class LoginPage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 20),
-
-              // Email TextField
               TextField(
+                controller: emailController,
                 decoration: InputDecoration(
                   labelText: 'E-mail Address',
                   labelStyle: TextStyle(color: Colors.blue),
@@ -61,9 +63,8 @@ class LoginPage extends StatelessWidget {
                 keyboardType: TextInputType.emailAddress,
               ),
               SizedBox(height: 20),
-
-              // Password TextField
               TextField(
+                controller: passwordController,
                 obscureText: true,
                 decoration: InputDecoration(
                   labelText: 'Password',
@@ -78,8 +79,6 @@ class LoginPage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 20),
-
-              // Log In Button
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
@@ -88,29 +87,58 @@ class LoginPage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(30),
                   ),
                 ),
-               onPressed: () {
-                  // Navigate to the HomePage on login
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => HomePage()),
-                  );
+                onPressed: () async {
+                  String email = emailController.text.trim();
+                  String password = passwordController.text.trim();
+
+                  try {
+                    // Authentification Firebase
+                    UserCredential userCredential = await FirebaseAuth.instance
+                        .signInWithEmailAndPassword(
+                      email: email,
+                      password: password,
+                    );
+
+                    // Vérifier le type d'utilisateur en fonction de l'email
+                    if (email.endsWith('@gmail.com')) {
+                      // Redirection vers la page utilisateur
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => HomePage()),
+                      );
+                    } else if (email.endsWith('@agence.com')) {
+                      // Redirection vers la page agence (Dashboard)
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => DashboardPage()),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("Unknown user type")),
+                      );
+                    }
+                  } catch (e) {
+                    // Affiche une erreur si l'authentification échoue
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("Login failed: $e")),
+                    );
+                  }
                 },
                 child: Text(
                   'Log In',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white, // White button text
+                    color: Colors.white,
                   ),
                 ),
               ),
-
-              // "Forgot Password?" link aligned to the bottom-right of the button
+              SizedBox(height: 10),
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
                   onPressed: () {
-                    // Navigate to forgot password screen
+                    // Ajouter une logique pour "Mot de passe oublié"
                   },
                   child: Text(
                     'Forgot Password?',
@@ -118,8 +146,6 @@ class LoginPage extends StatelessWidget {
                   ),
                 ),
               ),
-
-              // "Don't have an account?" link
               SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -130,8 +156,7 @@ class LoginPage extends StatelessWidget {
                   ),
                   TextButton(
                     onPressed: () {
-                      // Navigate to the signup screen
-                      Navigator.pushNamed(context, '/signup');
+                       Navigator.pushNamed(context, '/signup');
                     },
                     child: Text(
                       'Create a new account',

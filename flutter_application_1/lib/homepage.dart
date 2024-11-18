@@ -40,7 +40,7 @@ class _HomePageState extends State<HomePage> {
       case 3:
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => ProfilePage()),
+          MaterialPageRoute(builder: (context) => ProfilePage(userId: '', userData: {},)),
         );
         break;
     }
@@ -61,9 +61,7 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
             icon: Icon(Icons.settings, color: Colors.white),
-            onPressed: () {
-              
-            },
+            onPressed: () {},
           ),
         ],
       ),
@@ -84,14 +82,16 @@ class _HomePageState extends State<HomePage> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ProfilePage()),
+                  MaterialPageRoute(builder: (context) => ProfilePage(userId: '', userData: {},)),
                 );
               },
             ),
             ListTile(
               leading: const Icon(Icons.favorite),
               title: const Text('Favoris'),
-              onTap: () {},
+              onTap: () {
+             
+              },
             ),
             ListTile(
               leading: const Icon(Icons.logout),
@@ -291,11 +291,29 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Image.asset(
-              imagePath,
-              height: 150,
-              width: double.infinity,
-              fit: BoxFit.cover,
+            Stack(
+              children: [
+                Image.asset(
+                  imagePath,
+                  height: 150,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                ),
+                Positioned(
+                  top: 10,
+                  right: 10,
+                  child: GestureDetector(
+                    onTap: () {
+                      // Handle favorite action here
+                    },
+                    child: Icon(
+                      Icons.favorite_border,
+                      color: Colors.red, // Red color for favorite icon
+                      size: 30,
+                    ),
+                  ),
+                ),
+              ],
             ),
             Padding(
               padding:
@@ -305,21 +323,21 @@ class _HomePageState extends State<HomePage> {
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
             ),
-            Row(
-              children: [
-                Icon(Icons.star, color: Colors.orange, size: 16),
-                SizedBox(width: 4),
-                Text(rating, style: TextStyle(fontSize: 14)),
-              ],
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Row(
+                children: [
+                  Icon(Icons.star, color: Colors.orange, size: 16),
+                  Text(' $rating'),
+                ],
+              ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text("3-6 DAY", style: TextStyle(color: Colors.blue)),
-                Text(price3To6Days,
-                    style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              ],
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Text(
+                "3-6 Days: $price3To6Days",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
             ),
           ],
         ),

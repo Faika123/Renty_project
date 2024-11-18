@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'homepage.dart';
+import 'homepage.dart'; // Ensure HomePage is defined correctly
 
 class FavorisPage extends StatelessWidget {
-  final List<Map<String, String>> favoriteItems;
+  final List<Map<String, dynamic>> favoriteItems;
 
   FavorisPage({required this.favoriteItems});
 
@@ -17,18 +17,16 @@ class FavorisPage extends StatelessWidget {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            // Remplacez `HomePage()` par la page d'accueil de votre application
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (context) => HomePage()),
-              (Route<dynamic> route) => false,
-            );
+            // Navigate back and return the updated list of favorites
+            Navigator.pop(context, favoriteItems);
           },
         ),
       ),
       backgroundColor: Colors.grey[100],
       body: favoriteItems.isEmpty
-          ? Center(child: Text("No favorites yet", style: TextStyle(color: Colors.grey, fontSize: 18)))
+          ? Center(
+              child: Text("No favorites yet", style: TextStyle(color: Colors.grey, fontSize: 18)),
+            )
           : ListView.builder(
               padding: EdgeInsets.all(10),
               itemCount: favoriteItems.length,
@@ -60,7 +58,7 @@ class FavorisPage extends StatelessWidget {
                         ),
                       ),
                       subtitle: Text(
-                        item['price']!,
+                        '\$${item['price']} / jour',
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.grey[600],

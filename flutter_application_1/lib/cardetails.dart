@@ -54,7 +54,6 @@ class CarDetailsPage extends StatelessWidget {
               style: TextStyle(color: Colors.grey),
             ),
             SizedBox(height: 16),
-            // Description section
             Container(
               padding: EdgeInsets.all(16),
               decoration: BoxDecoration(
@@ -156,12 +155,10 @@ class CarDetailsPage extends StatelessWidget {
     );
   }
 
-  // Fonction pour afficher le formulaire de réservation dans un modal
   void _showReservationForm(BuildContext context) {
     DateTime? startDate;
     DateTime? endDate;
 
-    // Contrôleurs pour les champs de saisie
     TextEditingController startDateController = TextEditingController();
     TextEditingController endDateController = TextEditingController();
 
@@ -172,135 +169,140 @@ class CarDetailsPage extends StatelessWidget {
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (BuildContext context) {
-        return Padding(
-          padding: EdgeInsets.only(
-            left: 16,
-            right: 16,
-            bottom: MediaQuery.of(context).viewInsets.bottom + 16,
-            top: 16,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'Booking',
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 16),
-              _buildCustomTextField(label: 'Name'),
-              SizedBox(height: 12),
-              _buildCustomTextField(label: 'Email'),
-              SizedBox(height: 12),
-              _buildCustomTextField(label: 'Phone Number'),
-              SizedBox(height: 12),
-              GestureDetector(
-                onTap: () async {
-                  startDate = await showDatePicker(
-                    context: context,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime.now(),
-                    lastDate: DateTime(2101),
-                  );
-                  startDateController.text = DateFormat('yyyy-MM-dd').format(startDate!);
-                },
-                child: AbsorbPointer(
-                  child: _buildCustomTextField(
-                    label: 'Start Date',
-                    controller: startDateController,
-                    suffixIcon: Icons.calendar_today,
+        return Container(
+          height: 400, // Réduisez la taille du modal
+          child: Padding(
+            padding: EdgeInsets.only(
+              left: 16,
+              right: 16,
+              bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+              top: 16,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Booking',
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 16),
+                _buildCustomTextField(label: 'Email', icon: Icons.email),
+                SizedBox(height: 12),
+                _buildCustomTextField(label: 'Phone Number', icon: Icons.phone),
+                SizedBox(height: 12),
+                GestureDetector(
+                  onTap: () async {
+                    startDate = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime.now(),
+                      lastDate: DateTime(2101),
+                    );
+                    startDateController.text = DateFormat('yyyy-MM-dd').format(startDate!);
+                  },
+                  child: AbsorbPointer(
+                    child: _buildCustomTextField(
+                      label: 'Start Date',
+                      controller: startDateController,
+                      icon: Icons.calendar_today,
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(height: 12),
-              GestureDetector(
-                onTap: () async {
-                  endDate = await showDatePicker(
-                    context: context,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime.now(),
-                    lastDate: DateTime(2101),
-                  );
-                  endDateController.text = DateFormat('yyyy-MM-dd').format(endDate!);
-                },
-                child: AbsorbPointer(
-                  child: _buildCustomTextField(
-                    label: 'End Date',
-                    controller: endDateController,
-                    suffixIcon: Icons.calendar_today,
+                SizedBox(height: 12),
+                GestureDetector(
+                  onTap: () async {
+                    endDate = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime.now(),
+                      lastDate: DateTime(2101),
+                    );
+                    endDateController.text = DateFormat('yyyy-MM-dd').format(endDate!);
+                  },
+                  child: AbsorbPointer(
+                    child: _buildCustomTextField(
+                      label: 'End Date',
+                      controller: endDateController,
+                      icon: Icons.calendar_today,
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(height: 16),
-              _buildCustomDropdown(),
-              SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () {
-                  // Implémenter la soumission de la réservation
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                SizedBox(height: 16),
+                _buildCustomDropdown(),
+                SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () {
+                    // Implémenter la soumission de la réservation
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: Text(
+                    'Confirm Booking',
+                    style: TextStyle(color: Colors.white, fontSize: 18),
                   ),
                 ),
-                child: Text(
-                  'Confirm Booking',
-                  style: TextStyle(color: Colors.white, fontSize: 18),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },
     );
   }
 
-  // Widget personnalisé pour un champ de texte
   Widget _buildCustomTextField({
     required String label,
     TextEditingController? controller,
-    IconData? suffixIcon,
+    IconData? icon,
   }) {
-    return TextField(
-      controller: controller,
-      style: TextStyle(fontSize: 16),
-      decoration: InputDecoration(
-        labelText: label,
-        labelStyle: TextStyle(color: Colors.blue),
-        filled: true,
-        fillColor: Colors.blue.shade50,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide.none,
+    return Container(
+      width: double.infinity,
+      child: TextField(
+        controller: controller,
+        style: TextStyle(fontSize: 16),
+        decoration: InputDecoration(
+          labelText: label,
+          labelStyle: TextStyle(color: Colors.blue),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide.none,
+          ),
+          filled: true,
+          fillColor: Colors.grey.shade200,
+          prefixIcon: icon != null ? Icon(icon, color: Colors.blue) : null,
         ),
-        suffixIcon: suffixIcon != null ? Icon(suffixIcon, color: Colors.blue) : null,
       ),
     );
   }
 
-  // Widget personnalisé pour le Dropdown
   Widget _buildCustomDropdown() {
-    return DropdownButtonFormField<String>(
-      decoration: InputDecoration(
-        labelText: 'Service Type',
-        labelStyle: TextStyle(color: Colors.blue),
-        filled: true,
-        fillColor: Colors.blue.shade50,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide.none,
+    return Container(
+      width: double.infinity,
+      child: DropdownButtonFormField<String>(
+        decoration: InputDecoration(
+          labelText: 'Service Type',
+          labelStyle: TextStyle(color: Colors.blue),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide.none,
+          ),
+          filled: true,
+          fillColor: Colors.grey.shade200,
         ),
+        items: ['Without Driver', 'With Driver']
+            .map((label) => DropdownMenuItem(
+                  child: Text(label),
+                  value: label,
+                ))
+            .toList(),
+        onChanged: (value) {
+          // Handle service type selection
+        },
       ),
-      items: ['Without Driver', 'With Driver']
-          .map((label) => DropdownMenuItem(
-                child: Text(label),
-                value: label,
-              ))
-          .toList(),
-      onChanged: (value) {
-        // Handle service type selection
-      },
     );
   }
 }

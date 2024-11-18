@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/booking.dart';
 import 'listproduct.dart';
 import 'productadd.dart';
 import 'categories.dart';
+import 'profile.dart';
+import 'booking.dart';
+import 'login.dart';
 
 class DashboardPage extends StatelessWidget {
   final List<Map<String, dynamic>> cards = [
@@ -84,7 +88,14 @@ class DashboardPage extends StatelessWidget {
         actions: [
           IconButton(
             icon: Icon(Icons.person, color: Colors.black),
-            onPressed: () {},
+            onPressed: () {
+                  
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ProfilePage(userId: '', userData: {},)),
+                );
+              
+            },
           ),
         ],
       ),
@@ -119,7 +130,7 @@ class DashboardPage extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ProductAddPage()),
+                  MaterialPageRoute(builder: (context) => BookingPage()),
                 );
               },
             ),
@@ -136,6 +147,13 @@ class DashboardPage extends StatelessWidget {
             ListTile(
               leading: Icon(Icons.logout),
               title: Text('Logout', style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold)),
+                            onTap: () {
+                Navigator.pop(context);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginPage()),
+                );
+              },
             ),
           ],
         ),
@@ -267,7 +285,7 @@ class DashboardPage extends StatelessWidget {
           } else if (index == 2) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => ProductAddPage()),
+              MaterialPageRoute(builder: (context) => BookingPage()),
             );
           } else if (index == 3) {
             Navigator.push(
