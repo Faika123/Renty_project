@@ -51,16 +51,16 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: const Color.fromARGB(255, 249, 243, 243),
         elevation: 0,
         title: Text(
           "Renty.com",
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
-        iconTheme: IconThemeData(color: Colors.white),
+        iconTheme: IconThemeData(color: Colors.black),
         actions: [
           IconButton(
-            icon: Icon(Icons.settings, color: Colors.white),
+            icon: Icon(Icons.settings, color: Colors.black),
             onPressed: () {},
           ),
         ],
@@ -109,21 +109,11 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Stack(
         children: [
-          Positioned.fill(
-            child: Image.asset(
-              'assets/images/image4.jpg',
-              fit: BoxFit.cover,
-            ),
-          ),
-          Positioned.fill(
-            child: Container(
-              color: Colors.black.withOpacity(0.3),
-            ),
-          ),
+          
           SingleChildScrollView(
             child: Column(
               children: [
-                SizedBox(height: 200),
+                SizedBox(height: 100),
                 Text(
                   'Location de voitures à Tunis',
                   style: TextStyle(
@@ -135,7 +125,7 @@ class _HomePageState extends State<HomePage> {
                 SizedBox(height: 10),
                 Text(
                   'Trouvez la voiture de vos rêves en 60 secondes',
-                  style: TextStyle(fontSize: 16, color: Colors.white),
+                  style: TextStyle(fontSize: 16, color: Colors.black),
                 ),
                 SizedBox(height: 20),
                 Padding(
@@ -165,7 +155,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 SizedBox(height: 20),
                 Text(
-                  'TOUTES CATÉGORIES',
+                  'Toutes catégories',
                   style: TextStyle(
                     color: Colors.blue,
                     fontWeight: FontWeight.bold,
@@ -237,13 +227,13 @@ class _HomePageState extends State<HomePage> {
               label: '',
             ),
           ],
-          selectedItemColor: const Color.fromARGB(255, 244, 248, 252),
+          selectedItemColor: const Color.fromARGB(255, 7, 7, 7),
           unselectedItemColor:
-              const Color.fromARGB(255, 251, 252, 253).withOpacity(0.5),
+              const Color.fromARGB(255, 7, 7, 7).withOpacity(0.5),
           showSelectedLabels: false,
           showUnselectedLabels: false,
           type: BottomNavigationBarType.fixed,
-          backgroundColor: Colors.transparent.withOpacity(0.8),
+          backgroundColor: const Color.fromARGB(255, 249, 243, 243).withOpacity(0.8),
           elevation: 5,
         ),
       ),
