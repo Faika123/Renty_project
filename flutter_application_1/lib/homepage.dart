@@ -60,7 +60,7 @@ class _HomePageState extends State<HomePage> {
         iconTheme: IconThemeData(color: Colors.black),
         actions: [
           IconButton(
-            icon: Icon(Icons.settings, color: Colors.black),
+            icon: Icon(Icons.notifications, color: Colors.black),
             onPressed: () {},
           ),
         ],
