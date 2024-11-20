@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/favoris.dart';
+import 'package:flutter_application_1/feedback.dart';
 import 'categorycars.dart';
 import 'login.dart';
 import 'profile.dart';
 import 'favoris.dart';
+import 'Notification.dart';
+import 'feedback.dart';
+import 'FeedbackList.dart';
+import 'personalinfo.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -40,7 +45,7 @@ class _HomePageState extends State<HomePage> {
       case 3:
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => ProfilePage(userId: '', userData: {},)),
+          MaterialPageRoute(builder: (context) => ProfilePage()),
         );
         break;
     }
@@ -61,8 +66,14 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
             icon: Icon(Icons.notifications, color: Colors.black),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => NotificationPage(userId: '',)),
+                );
+            },
           ),
+    
         ],
       ),
       drawer: Drawer(
@@ -82,7 +93,7 @@ class _HomePageState extends State<HomePage> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ProfilePage(userId: '', userData: {},)),
+                  MaterialPageRoute(builder: (context) => Personalinfo()),
                 );
               },
             ),
@@ -91,6 +102,16 @@ class _HomePageState extends State<HomePage> {
               title: const Text('Favoris'),
               onTap: () {
              
+              },
+            ),
+               ListTile(
+              leading: const Icon(Icons.feedback),
+              title: const Text('feedback'),
+              onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => FeedbackPage()),
+                );
               },
             ),
             ListTile(

@@ -6,6 +6,8 @@ import 'categories.dart';
 import 'profile.dart';
 import 'booking.dart';
 import 'login.dart';
+import 'FeedbackList.dart';
+
 
 class DashboardPage extends StatelessWidget {
   final List<Map<String, dynamic>> cards = [
@@ -87,12 +89,12 @@ class DashboardPage extends StatelessWidget {
         centerTitle: true,
         actions: [
           IconButton(
-            icon: Icon(Icons.person, color: Colors.black),
+            icon: Icon(Icons.feedback, color: Colors.black),
             onPressed: () {
                   
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ProfilePage(userId: '', userData: {},)),
+                  MaterialPageRoute(builder: (context) => FeedbackListPage()),
                 );
               
             },
@@ -119,7 +121,7 @@ class DashboardPage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ListProductPage(items: items),
+                    builder: (context) => ListProductPage(),
                   ),
                 );
               },
@@ -280,7 +282,7 @@ class DashboardPage extends StatelessWidget {
           } else if (index == 1) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => ListProductPage(items: items)),
+              MaterialPageRoute(builder: (context) => ListProductPage()),
             );
           } else if (index == 2) {
             Navigator.push(
