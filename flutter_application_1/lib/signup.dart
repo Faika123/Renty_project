@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+enum UserType { agency, client }
 
 class SignupPage extends StatefulWidget {
   @override
@@ -8,6 +11,7 @@ class SignupPage extends StatefulWidget {
 
 class _SignupPageState extends State<SignupPage> {
   final _auth = FirebaseAuth.instance;
+  final _firestore = FirebaseFirestore.instance;
 
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
@@ -15,7 +19,7 @@ class _SignupPageState extends State<SignupPage> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
-  String? userType;
+  UserType? _userType;
 
   @override
   void dispose() {
@@ -35,7 +39,7 @@ class _SignupPageState extends State<SignupPage> {
       return;
     }
 
-    if (userType == null) {
+    if (_userType == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Please select an account type')),
       );
@@ -43,27 +47,46 @@ class _SignupPageState extends State<SignupPage> {
     }
 
     try {
-      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+      // Create user in Firebase Auth
+      UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
 
-      // Update display name
-      await userCredential.user?.updateDisplayName(_nameController.text.trim());
+      User? user = userCredential.user;
 
-      // Show success message and navigate to login
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Account created successfully!')),
-      );
-      Navigator.pushNamed(context, '/login');
+      if (user != null) {
+        // Update display name
+        await user.updateDisplayName(_nameController.text.trim());
+
+        // Add user to Firestore `users` collection
+        await _firestore.collection('users').doc(user.uid).set({
+          'name': _nameController.text.trim(),
+          'email': _emailController.text.trim(),
+          'phone': _phoneController.text.trim(),
+          'password': _passwordController.text
+              .trim(), // Plain-text password (for testing only)
+          'userType': _userType == UserType.agency ? 'agency' : 'client',
+          'createdAt': FieldValue.serverTimestamp(),
+        });
+
+        // Show success message and navigate to login
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Account created successfully!')),
+        );
+        Navigator.pushNamed(context, '/login');
+      }
     } on FirebaseAuthException catch (e) {
       String errorMessage;
 
       // Specific Firebase error handling
       if (e.code == 'email-already-in-use') {
-        errorMessage = 'The email is already in use. Please use a different email.';
+        errorMessage =
+            'The email is already in use. Please use a different email.';
       } else if (e.code == 'weak-password') {
-        errorMessage = 'The password is too weak. Please use a stronger password.';
+        errorMessage =
+            'The password is too weak. Please use a stronger password.';
       } else if (e.code == 'invalid-email') {
         errorMessage = 'The email address is not valid.';
       } else {
@@ -160,7 +183,7 @@ class _SignupPageState extends State<SignupPage> {
                     SizedBox(height: 20),
 
                     // Account Type Dropdown
-                    DropdownButtonFormField<String>(
+                    DropdownButtonFormField<UserType>(
                       decoration: InputDecoration(
                         labelText: 'Account Type',
                         labelStyle: TextStyle(color: Colors.blue),
@@ -169,16 +192,17 @@ class _SignupPageState extends State<SignupPage> {
                           borderRadius: BorderRadius.circular(30),
                         ),
                       ),
-                      value: userType,
-                      items: ['User', 'Agence'].map((String type) {
-                        return DropdownMenuItem<String>(
+                      value: _userType,
+                      items: UserType.values.map((UserType type) {
+                        return DropdownMenuItem<UserType>(
                           value: type,
-                          child: Text(type),
+                          child: Text(
+                              type == UserType.agency ? 'Agency' : 'Client'),
                         );
                       }).toList(),
                       onChanged: (value) {
                         setState(() {
-                          userType = value;
+                          _userType = value;
                         });
                       },
                     ),
@@ -218,7 +242,8 @@ class _SignupPageState extends State<SignupPage> {
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue,
-                        padding: EdgeInsets.symmetric(horizontal: 60, vertical: 15),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 60, vertical: 15),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
                         ),

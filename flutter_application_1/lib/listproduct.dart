@@ -36,7 +36,8 @@ class _ListProductPageState extends State<ListProductPage> {
                 child: Center(
                   child: GridView.builder(
                     shrinkWrap: true,
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       crossAxisSpacing: 16,
                       mainAxisSpacing: 16,
@@ -61,7 +62,8 @@ class _ListProductPageState extends State<ListProductPage> {
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,
-                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 32),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 12, horizontal: 32),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
@@ -144,7 +146,8 @@ class _ListProductPageState extends State<ListProductPage> {
                   },
                   child: const Text("Edit"),
                   style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white, backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.blue,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -162,7 +165,8 @@ class _ListProductPageState extends State<ListProductPage> {
                   },
                   child: const Text("Delete"),
                   style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white, backgroundColor: Colors.red,
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.red,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),

@@ -3,43 +3,50 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class BookingPage extends StatefulWidget {
+class ReservationPage extends StatelessWidget {
   final Map<String, dynamic> car;
 
-  BookingPage({required this.car});
+  ReservationPage({required this.car});
 
-  @override
-  _BookingPageState createState() => _BookingPageState();
-}
-
-class _BookingPageState extends State<BookingPage> {
-  DateTime? startDate;
-  DateTime? endDate;
-
-  TextEditingController emailController = TextEditingController();
-  TextEditingController phoneController = TextEditingController();
-  TextEditingController startDateController = TextEditingController();
-  TextEditingController endDateController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController startDateController = TextEditingController();
+  final TextEditingController endDateController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    DateTime? startDate;
+    DateTime? endDate;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Booking ${widget.car['name']}'),
-        backgroundColor: Colors.blue,
+        title: const Text('Reservation'),
+        backgroundColor: Colors.blue.shade700,
+        elevation: 0,
       ),
-      body: Padding(
-        padding: EdgeInsets.all(16),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
         child: Column(
           children: [
+            const Text(
+              "Complete Your Reservation",
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Colors.blue,
+              ),
+            ),
+            const SizedBox(height: 16),
             _buildCustomTextField(
-                label: 'Email', controller: emailController, icon: Icons.email),
-            SizedBox(height: 12),
+                label: 'Email',
+                controller: emailController,
+                icon: Icons.email),
+            const SizedBox(height: 16),
             _buildCustomTextField(
                 label: 'Phone Number',
                 controller: phoneController,
                 icon: Icons.phone),
-            SizedBox(height: 12),
+            const SizedBox(height: 16),
             GestureDetector(
               onTap: () async {
                 startDate = await showDatePicker(
@@ -61,7 +68,7 @@ class _BookingPageState extends State<BookingPage> {
                 ),
               ),
             ),
-            SizedBox(height: 12),
+            const SizedBox(height: 16),
             GestureDetector(
               onTap: () async {
                 endDate = await showDatePicker(
@@ -83,9 +90,9 @@ class _BookingPageState extends State<BookingPage> {
                 ),
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             _buildCustomDropdown(),
-            SizedBox(height: 16),
+            const SizedBox(height: 24),
             ElevatedButton(
               onPressed: () async {
                 await _submitBooking(
@@ -98,15 +105,16 @@ class _BookingPageState extends State<BookingPage> {
                 _showPaymentForm(context);
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
-                padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                backgroundColor: Colors.blue.shade700,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(16),
                 ),
               ),
-              child: Text(
-                'Confirm Booking',
-                style: TextStyle(color: Colors.white, fontSize: 18),
+              child: const Text(
+                'Confirm Reservation',
+                style: TextStyle(fontSize: 18, color: Colors.white),
               ),
             ),
           ],
@@ -122,7 +130,7 @@ class _BookingPageState extends State<BookingPage> {
     if (user != null) {
       await FirebaseFirestore.instance.collection('bookings').add({
         'userId': user.uid,
-        'carId': widget.car['id'],
+        'carId': car['id'],
         'startDate': startDate,
         'endDate': endDate,
         'email': email,
@@ -132,73 +140,28 @@ class _BookingPageState extends State<BookingPage> {
     }
   }
 
-  void _showPaymentForm(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-      ),
-      builder: (BuildContext context) {
-        return Container(
-          padding: EdgeInsets.all(16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'Payment',
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 16),
-              _buildCustomTextField(
-                label: 'Card Number',
-                icon: Icons.credit_card,
-              ),
-              SizedBox(height: 12),
-              _buildCustomTextField(
-                label: 'Expiry Date',
-                icon: Icons.date_range,
-              ),
-              SizedBox(height: 12),
-              _buildCustomTextField(
-                label: 'CVV',
-                icon: Icons.security,
-              ),
-              SizedBox(height: 24),
-              ElevatedButton(
-                onPressed: () {
-                  // Process payment logic here
-                  Navigator.pop(context);
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: Text(
-                  'Pay Now',
-                  style: TextStyle(color: Colors.white, fontSize: 18),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
   Widget _buildCustomTextField(
       {required String label,
       IconData? icon,
       TextEditingController? controller}) {
     return TextField(
       controller: controller,
+      style: const TextStyle(fontSize: 16),
       decoration: InputDecoration(
         labelText: label,
-        prefixIcon: Icon(icon),
+        labelStyle: TextStyle(color: Colors.blue.shade700),
+        prefixIcon: Icon(icon, color: Colors.blue),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(16),
+          borderSide: const BorderSide(color: Colors.blue),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide(color: Colors.blue.shade300, width: 2),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide(color: Colors.blue.shade700, width: 2),
         ),
       ),
     );
@@ -208,16 +171,67 @@ class _BookingPageState extends State<BookingPage> {
     return DropdownButtonFormField<String>(
       decoration: InputDecoration(
         labelText: 'Service Type',
+        labelStyle: TextStyle(color: Colors.blue.shade700),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(16),
+          borderSide: const BorderSide(color: Colors.blue),
         ),
       ),
-      items: [
+      items: const [
         DropdownMenuItem(
             value: 'Without Driver', child: Text('Without Driver')),
         DropdownMenuItem(value: 'With Driver', child: Text('With Driver')),
       ],
       onChanged: (value) {},
+    );
+  }
+
+  void _showPaymentForm(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (BuildContext context) {
+        return Container(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                'Payment Details',
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 16),
+              _buildCustomTextField(
+                  label: 'Card Number', icon: Icons.credit_card),
+              const SizedBox(height: 16),
+              _buildCustomTextField(
+                  label: 'Expiry Date', icon: Icons.date_range),
+              const SizedBox(height: 16),
+              _buildCustomTextField(label: 'CVV', icon: Icons.security),
+              const SizedBox(height: 24),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue.shade700,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                ),
+                child: const Text(
+                  'Pay Now',
+                  style: TextStyle(fontSize: 18, color: Colors.white),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

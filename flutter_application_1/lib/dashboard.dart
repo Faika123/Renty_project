@@ -130,7 +130,7 @@ class DashboardPage extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => BookingPage()),
+                  MaterialPageRoute(builder: (context) => BookingPage(car: {},)),
                 );
               },
             ),
@@ -285,7 +285,7 @@ class DashboardPage extends StatelessWidget {
           } else if (index == 2) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => BookingPage()),
+              MaterialPageRoute(builder: (context) => BookingPage(car: {},)),
             );
           } else if (index == 3) {
             Navigator.push(
