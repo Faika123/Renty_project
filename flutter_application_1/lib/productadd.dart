@@ -1,6 +1,9 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'productConfirmationPage.dart'; // Importer la page de confirmation
 
 class ProductAddPage extends StatefulWidget {
   @override
@@ -9,10 +12,17 @@ class ProductAddPage extends StatefulWidget {
 
 class _ProductAddPageState extends State<ProductAddPage> {
   final _formKey = GlobalKey<FormState>();
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _locationController = TextEditingController();
+  final TextEditingController _priceController = TextEditingController();
+  String? _category;
   XFile? _imageFile;
   Uint8List? _imageData;
   final ImagePicker _picker = ImagePicker();
 
+  // Méthode pour sélectionner une image depuis la galerie
   Future<void> _pickImage() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
@@ -24,6 +34,24 @@ class _ProductAddPageState extends State<ProductAddPage> {
     }
   }
 
+  // Fonction pour naviguer vers la page de confirmation
+  void _navigateToConfirmationPage() {
+    if (_formKey.currentState!.validate()) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ProductConfirmationPage(
+            title: _titleController.text,
+            description: _descriptionController.text,
+            price: _priceController.text,
+            category: _category ?? 'No category selected',
+            image: _imageData,
+          ),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,6 +59,7 @@ class _ProductAddPageState extends State<ProductAddPage> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
+        title: Text('Add Product'),
       ),
       body: Center(
         child: SingleChildScrollView(
@@ -55,7 +84,6 @@ class _ProductAddPageState extends State<ProductAddPage> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Title above the form
                   Text(
                     'Add Product',
                     style: TextStyle(
@@ -64,10 +92,11 @@ class _ProductAddPageState extends State<ProductAddPage> {
                       color: Colors.blue,
                     ),
                   ),
-                  SizedBox(height: 20), // Space between title and form
+                  SizedBox(height: 20),
 
                   // Title TextField
                   TextFormField(
+                    controller: _titleController,
                     decoration: InputDecoration(
                       labelText: 'Title',
                       labelStyle: TextStyle(color: Colors.blue),
@@ -79,11 +108,18 @@ class _ProductAddPageState extends State<ProductAddPage> {
                         borderSide: BorderSide.none,
                       ),
                     ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a title';
+                      }
+                      return null;
+                    },
                   ),
                   SizedBox(height: 20),
 
                   // Phone TextField
                   TextFormField(
+                    controller: _phoneController,
                     decoration: InputDecoration(
                       labelText: 'Phone',
                       labelStyle: TextStyle(color: Colors.blue),
@@ -101,6 +137,7 @@ class _ProductAddPageState extends State<ProductAddPage> {
 
                   // Description TextField
                   TextFormField(
+                    controller: _descriptionController,
                     decoration: InputDecoration(
                       labelText: 'Description',
                       labelStyle: TextStyle(color: Colors.blue),
@@ -118,6 +155,7 @@ class _ProductAddPageState extends State<ProductAddPage> {
 
                   // Location TextField
                   TextFormField(
+                    controller: _locationController,
                     decoration: InputDecoration(
                       labelText: 'Location',
                       labelStyle: TextStyle(color: Colors.blue),
@@ -132,15 +170,17 @@ class _ProductAddPageState extends State<ProductAddPage> {
                   ),
                   SizedBox(height: 20),
 
-                  // Price and Category fields in a Row
+                  // Price and Category fields
                   Row(
                     children: [
                       Expanded(
                         child: TextFormField(
+                          controller: _priceController,
                           decoration: InputDecoration(
                             labelText: 'Price',
                             labelStyle: TextStyle(color: Colors.blue),
-                            prefixIcon: Icon(Icons.monetization_on, color: Colors.blue),
+                            prefixIcon:
+                                Icon(Icons.monetization_on, color: Colors.blue),
                             filled: true,
                             fillColor: Colors.blue.shade50,
                             border: OutlineInputBorder(
@@ -164,19 +204,28 @@ class _ProductAddPageState extends State<ProductAddPage> {
                               borderSide: BorderSide.none,
                             ),
                           ),
+                          value: _category,
                           items: [
                             DropdownMenuItem(
-                                child: Text('Luxury cars'), value: 'Luxury cars'),
+                                child: Text('Luxury cars'),
+                                value: 'Luxury cars'),
                             DropdownMenuItem(
-                                child: Text('Sports cars'), value: 'Sports cars'),
+                                child: Text('Sports cars'),
+                                value: 'Sports cars'),
                             DropdownMenuItem(
                                 child: Text('VIP cars'), value: 'VIP cars'),
                             DropdownMenuItem(
-                                child: Text('Prestige cars'), value: 'Prestige cars'),
+                                child: Text('Prestige cars'),
+                                value: 'Prestige cars'),
                             DropdownMenuItem(
-                                child: Text('Economy cars'), value: 'Economy cars'),
+                                child: Text('Economy cars'),
+                                value: 'Economy cars'),
                           ],
-                          onChanged: (value) {},
+                          onChanged: (value) {
+                            setState(() {
+                              _category = value;
+                            });
+                          },
                         ),
                       ),
                     ],
@@ -202,24 +251,18 @@ class _ProductAddPageState extends State<ProductAddPage> {
                                     style: TextStyle(color: Colors.blue)),
                               ],
                             )
-                          : Image.memory(
-                              _imageData!,
-                              fit: BoxFit.cover,
-                            ),
+                          : Image.memory(_imageData!, fit: BoxFit.cover),
                     ),
                   ),
                   SizedBox(height: 30),
 
                   // Submit button
                   ElevatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        // Handle form submission
-                      }
-                    },
+                    onPressed: _navigateToConfirmationPage,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue,
-                      padding: EdgeInsets.symmetric(horizontal: 60, vertical: 15),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 60, vertical: 15),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
@@ -227,9 +270,10 @@ class _ProductAddPageState extends State<ProductAddPage> {
                     child: Text(
                       'Add product',
                       style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white),
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ],

@@ -89,12 +89,14 @@ class DashboardPage extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.person, color: Colors.black),
             onPressed: () {
-                  
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ProfilePage(userId: '', userData: {},)),
-                );
-              
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ProfilePage(
+                          userId: '',
+                          userData: {},
+                        )),
+              );
             },
           ),
         ],
@@ -114,7 +116,9 @@ class DashboardPage extends StatelessWidget {
             ),
             ListTile(
               leading: Icon(Icons.shopping_bag),
-              title: Text('Product List', style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold)),
+              title: Text('Product List',
+                  style:
+                      TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold)),
               onTap: () {
                 Navigator.push(
                   context,
@@ -126,17 +130,24 @@ class DashboardPage extends StatelessWidget {
             ),
             ListTile(
               leading: Icon(Icons.calendar_today),
-              title: Text('Booking List', style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold)),
+              title: Text('Booking List',
+                  style:
+                      TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold)),
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => BookingPage(car: {},)),
+                  MaterialPageRoute(
+                      builder: (context) => BookingPage(
+                            car: {},
+                          )),
                 );
               },
             ),
             ListTile(
               leading: Icon(Icons.category),
-              title: Text('Category List', style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold)),
+              title: Text('Category List',
+                  style:
+                      TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold)),
               onTap: () {
                 Navigator.push(
                   context,
@@ -146,8 +157,10 @@ class DashboardPage extends StatelessWidget {
             ),
             ListTile(
               leading: Icon(Icons.logout),
-              title: Text('Logout', style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold)),
-                            onTap: () {
+              title: Text('Logout',
+                  style:
+                      TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold)),
+              onTap: () {
                 Navigator.pop(context);
                 Navigator.pushReplacement(
                   context,
@@ -248,7 +261,8 @@ class DashboardPage extends StatelessWidget {
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed, // Ensures the height is smaller
         iconSize: 24, // Adjust icon size to reduce the height further
-        backgroundColor: Colors.white.withOpacity(0.9), // Set a transparent white background to match AppBar
+        backgroundColor: Colors.white.withOpacity(
+            0.9), // Set a transparent white background to match AppBar
         selectedItemColor: Colors.blue, // Change the selected item color
         unselectedItemColor: Colors.grey, // Change the unselected item color
         elevation: 5, // Optional, to add a subtle shadow
@@ -280,12 +294,16 @@ class DashboardPage extends StatelessWidget {
           } else if (index == 1) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => ListProductPage(items: items)),
+              MaterialPageRoute(
+                  builder: (context) => ListProductPage(items: items)),
             );
           } else if (index == 2) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => BookingPage(car: {},)),
+              MaterialPageRoute(
+                  builder: (context) => BookingPage(
+                        car: {},
+                      )),
             );
           } else if (index == 3) {
             Navigator.push(
